@@ -1,0 +1,8 @@
+/* HUMANS */
+Developer: Chris
+Contact: chrismartintx.com
+From: Round Rock, Texas
+
+/* SITE */
+Standards: HTML5, CSS3, JS
+Last update: 2024-11-01

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Matcher</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            white-space: pre-wrap; /* This allows each word to appear on a new line in the same cell */
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Word Matcher</h1>
+    
+    <p>Paste lists of words into each text area, with one word per line. The script will find common words between the lists and display the original and modified versions.</p>
+
+    <textarea id="array1" placeholder="Paste words for Array 1 here..."></textarea>
+    <textarea id="array2" placeholder="Paste words for Array 2 here..."></textarea>
+    <textarea id="array3" placeholder="Paste words for Array 3 here..."></textarea>
+
+    <button onclick="processWords()">Find Common Words</button>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Common in Array 1 & Array 2</th>
+                <th>Common in Array 2 & Array 3</th>
+                <th>Common in Array 1 & Array 3</th>
+                <th>Common in All Three</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- First row for original strings -->
+            <tr>
+                <td id="common1and2"></td>
+                <td id="common2and3"></td>
+                <td id="common1and3"></td>
+                <td id="commonAllThree"></td>
+            </tr>
+            <!-- Second row for modified (cleaned) strings -->
+            <tr>
+                <td id="modified1and2"></td>
+                <td id="modified2and3"></td>
+                <td id="modified1and3"></td>
+                <td id="modifiedAllThree"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Function to find common words
+        function findCommonWords(array1, array2, array3) {
+            function findCommonBetweenTwo(arr1, arr2) {
+                const cleanedArr2 = arr2.map(item => item.cleaned);
+                return arr1.filter(item => cleanedArr2.includes(item.cleaned));
+            }
+
+            const common1and2 = findCommonBetweenTwo(array1, array2);
+            const common2and3 = findCommonBetweenTwo(array2, array3);
+            const common1and3 = findCommonBetweenTwo(array1, array3);
+            const commonAllThree = common1and2.filter(item => array3.some(el => el.cleaned === item.cleaned));
+
+            return { common1and2, common2and3, common1and3, commonAllThree };
+        }
+
+        // Function to process the word lists from textareas
+        function processWords() {
+            // Get the values from the textareas
+            const array1Text = document.getElementById('array1').value;
+            const array2Text = document.getElementById('array2').value;
+            const array3Text = document.getElementById('array3').value;
+
+            // Process the text into arrays of objects (with original and cleaned strings)
+            const array1 = cleanAndConvertToArray(array1Text);
+            const array2 = cleanAndConvertToArray(array2Text);
+            const array3 = cleanAndConvertToArray(array3Text);
+
+            // Find common words between the arrays
+            const result = findCommonWords(array1, array2, array3);
+
+            // Output the original strings to the table
+            document.getElementById('common1and2').innerText = result.common1and2.map(item => item.original).join('\n') || 'No matches';
+            document.getElementById('common2and3').innerText = result.common2and3.map(item => item.original).join('\n') || 'No matches';
+            document.getElementById('common1and3').innerText = result.common1and3.map(item => item.original).join('\n') || 'No matches';
+            document.getElementById('commonAllThree').innerText = result.commonAllThree.map(item => item.original).join('\n') || 'No matches';
+
+            // Output the cleaned (modified) strings to the table
+            document.getElementById('modified1and2').innerText = result.common1and2.map(item => item.cleaned).join('\n') || 'No matches';
+            document.getElementById('modified2and3').innerText = result.common2and3.map(item => item.cleaned).join('\n') || 'No matches';
+            document.getElementById('modified1and3').innerText = result.common1and3.map(item => item.cleaned).join('\n') || 'No matches';
+            document.getElementById('modifiedAllThree').innerText = result.commonAllThree.map(item => item.cleaned).join('\n') || 'No matches';
+        }
+
+        // Function to clean text and convert it into an array of objects (original and cleaned)
+        function cleanAndConvertToArray(text) {
+            return text
+                .split('\n')                             // Split by new lines
+                .map(line => line.trim())                 // Trim whitespace
+                .filter(line => line !== '')              // Remove empty lines
+                .map(line => ({
+                    original: line,
+                    cleaned: line.replace(/[^a-zA-Z]/g, '').toLowerCase() // Remove non-alphanumeric and lowercase
+                }));
+        }
+    </script>
+
+</body>
+</html>

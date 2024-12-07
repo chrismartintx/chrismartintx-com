@@ -1,0 +1,745 @@
+<html lang="en">
+<head>
+    <title>wx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌩</text></svg>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/3ad0df0de4.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="searchBox" class="form-control" placeholder="Search...">
+                <ul id="searchResults" class="list-group mt-2"></ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#" onclick="toggleAllMeteograms()"><i class="fa-sharp fa-solid fa-cloud-bolt-sun"></i> wx</a>
+            <a href="#" class="navbar-brand" data-toggle="modal" data-target="#searchModal"><i class="fa-sharp fa-solid fa-search"></i></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link" onclick="toggleAllMeteograms()">ALL METEOGRAMS</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="nwswfoDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            NWSWFO
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="nwswfoDropdownMenuLink">
+                            <a href="https://www.weather.gov/AMA/" target="_blank" class="dropdown-item text-uppercase">AMA (Amarillo)</a>
+                            <a href="https://www.weather.gov/BRO/" target="_blank" class="dropdown-item text-uppercase">BRO (Brownsville)</a>
+                            <a href="https://www.weather.gov/CRP/" target="_blank" class="dropdown-item text-uppercase">CRP (Corpus)</a>
+                            <a href="https://www.weather.gov/EPZ/" target="_blank" class="dropdown-item text-uppercase">EPZ (El Paso)</a>
+                            <a href="https://www.weather.gov/ewx/" target="_blank" class="dropdown-item text-uppercase">EWX (San Antonio)</a>
+                            <a href="https://www.weather.gov/fwd/" target="_blank" class="dropdown-item text-uppercase">FWD (Dallas)</a>
+                            <a href="https://www.weather.gov/hgx/" target="_blank" class="dropdown-item text-uppercase">HGX (Houston)</a>
+                            <a href="https://www.weather.gov/LCH/" target="_blank" class="dropdown-item text-uppercase">LCH (Lake Charles)</a>
+                            <a href="https://www.weather.gov/LUB/" target="_blank" class="dropdown-item text-uppercase">LUB (Lubbock)</a>
+                            <a href="https://www.weather.gov/MAF/" target="_blank" class="dropdown-item text-uppercase">MAF (Midland)</a>
+                            <a href="https://www.weather.gov/OUN/" target="_blank" class="dropdown-item text-uppercase">OUN (Norman)</a>
+                            <a href="https://www.weather.gov/SHV/" target="_blank" class="dropdown-item text-uppercase">SHV (Shrevport)</a>
+                            <a href="https://www.weather.gov/SJT/" target="_blank" class="dropdown-item text-uppercase">SJT (San Angelo)</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="srhDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SOUTHERN REGION
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="srhDropdownMenuLink">
+                            <a href="https://www.weather.gov/srh/" target="_blank" class="dropdown-item text-uppercase">SRH</a>
+                            <a href="https://www.weather.gov/wgrfc/" target="_blank" class="dropdown-item text-uppercase">WGRFC</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="noaaDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            NOAA
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="noaaDropdownMenuLink">
+                            <a href="https://www.spc.noaa.gov/" target="_blank" class="dropdown-item text-uppercase">Storm Prediction Center</a>
+                            <a href="https://aviationweather.gov/" target="_blank" class="dropdown-item text-uppercase">Aviation Weather Center</a>
+                            <a href="https://www.cpc.ncep.noaa.gov/" target="_blank" class="dropdown-item text-uppercase">Climate Prediction Center</a>
+                            <a href="https://www.wpc.ncep.noaa.gov/#page=ovw" target="_blank" class="dropdown-item text-uppercase">Weather Prediction Center</a>
+                            <a href="https://water.weather.gov/ahps/region.php?state=tx" target="_blank" class="dropdown-item text-uppercase">AHPS</a>
+                            <a href="https://www.wrh.noaa.gov/zoa/mwmap3.php?map=usa" target="_blank" class="dropdown-item text-uppercase">National METAR/TAF</a>
+                            <a href="https://www.nhc.noaa.gov/" target="_blank" class="dropdown-item text-uppercase">NHC</a>
+                            <a href="https://tsunami.gov/" target="_blank" class="dropdown-item text-uppercase">Tsunami</a>
+                            <a href="https://inws.ncep.noaa.gov/" target="_blank" class="dropdown-item text-uppercase">iNWS</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="fireDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            FIRE
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="fireDropdownMenuLink">
+                            <a href="https://www.weather.gov/fire/" target="_blank" class="dropdown-item text-uppercase">Fire Wx</a>
+                            <a href="https://twc.tamu.edu/kbdi" target="_blank" class="dropdown-item text-uppercase">TAMU KBDI</a>
+                            <a href="https://twc.tamu.edu/tfd" target="_blank" class="dropdown-item text-uppercase">TAMU TFD</a>
+                            <a href="https://tfswildfires.com/public/" target="_blank" class="dropdown-item text-uppercase">Texas A&M Forest Service</a>
+                            <a href="https://inciweb.nwcg.gov/" target="_blank" class="dropdown-item text-uppercase">NWCG Inciweb</a>
+                            <a href="https://livingatlas.arcgis.com/wildfireaware/" target="_blank" class="dropdown-item text-uppercase">ESRI Wildfire Map</a>
+                            <a href="https://data.statesman.com/fires/" target="_blank" class="dropdown-item text-uppercase">Statesman Fire Map</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="floodDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            FLOOD
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="floodDropdownMenuLink">
+                            <a href="https://hazards-fema.maps.arcgis.com/apps/webappviewer/index.html?id=8b0adb51996444d4879338b5529aa9cd" target="_blank" class="dropdown-item text-uppercase">FEMA NFHL</a>
+                            <a href="https://www.iweathernet.com/total-rainfall-map-24-hours-to-72-hours" target="_blank" class="dropdown-item text-uppercase">iWEATHERNET - Rainfall Totals</a>
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="utilitiesDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            INFRASTRUCTURE
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="utilitiesDropdownMenuLink">
+                            <a href="https://drivetexas.org/#/11/29.5833/-98.4712?future=false&resources=traffic" target="_blank" class="dropdown-item text-uppercase">DriveTexas</a>
+                            <a href="https://www.txdot.gov/discover/live-traffic-cameras.html" target="_blank" class="dropdown-item text-uppercase">TxDOT Cameras</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="https://poweroutage.us/area/state/texas" target="_blank" class="dropdown-item text-uppercase">PowerOutage.US</a>
+                            <a href="https://www.ercot.com/gridmktinfo/dashboards" target="_blank" class="dropdown-item text-uppercase">ERCOT</a>
+                            <a href="https://p.datadoghq.com/sb/5c2fc00be-393be929c9c55c3b80b557d08c30787a?fromUser=false&refresh_mode=sliding&tv_mode=false&from_ts=1701793415714&to_ts=1709569415714&live=true" target="_blank" class="dropdown-item text-uppercase">ERCOT - Datadog</a>
+                            <a href="https://www.pec.coop/pec-outage-center/" target="_blank" class="dropdown-item text-uppercase">Pedernales Electric</a>
+                            <a href="https://austinenergy.com/outages" target="_blank" class="dropdown-item text-uppercase">Austin Energy</a>
+                            <a href="https://outage.bluebonnetelectric.coop/" target="_blank" class="dropdown-item text-uppercase">Bluebonnet Electric</a>
+                            <a href="https://www.cpsenergy.com/en/customer-support/outages-and-safety/outage-map.html" target="_blank" class="dropdown-item text-uppercase">CPS Energy</a>
+                            <a href="https://stormcenter.oncor.com/" target="_blank" class="dropdown-item text-uppercase">Oncor</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="miscDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            MISC
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="miscDropdownMenuLink">
+                            <a href="https://weather.msfc.nasa.gov/GOES/" target="_blank" class="dropdown-item text-uppercase">NASA GOES</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="https://www.texmesonet.org/" target="_blank" class="dropdown-item text-uppercase">TexMesonet</a>
+                            <a href="https://weather.cod.edu/forecast/" target="_blank" class="dropdown-item text-uppercase">College of DuPage</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="https://www.lightningmaps.org/?lang=en#m=oss;t=3;s=0;o=0;b=0.00;ts=0;d=2;dl=2;dc=0;z=6;y=31.1188;x=-98.5693;tc=1;tr=1;" target="_blank" class="dropdown-item text-uppercase">Lightning Maps</a>
+                            <a href="https://www.tornadohq.com/severe-weather-map/" target="_blank" class="dropdown-item text-uppercase">Tornado HQ</a>
+                            <a href="https://www.ventusky.com/" target="_blank" class="dropdown-item text-uppercase">Ventusky</a>
+                            <a href="https://www.tropicaltidbits.com/" target="_blank" class="dropdown-item text-uppercase">Tropical Tidbits</a>
+                            <a href="https://www.windy.com/?29.424,-98.494,5" target="_blank" class="dropdown-item text-uppercase">Windy</a>
+                            <a href="https://www.cyclocane.com/" target="_blank" class="dropdown-item text-uppercase">Cyclocane</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="https://statisticalatlas.com/United-States/Overview" target="_blank" class="dropdown-item text-uppercase">Statistical Atlas</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="brushyCreekDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            BRUSHY CREEK
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="brushyCreekDropdownMenuLink">
+                            <a href="https://www.weather.gov/forecastpoints?lat=30.509&lon=-97.727&clat=30.509&clon=-97.727&zoom=9.5&basemap=esridarkgray&bbox=-19719439,1706090,-1372338,10673494&layers=Rivers,Day1ConvectiveOutlook,RangeRings,LocalStormReports,HazardsActive,Forecast,USStates,USCounties,ForecastPointPolygon,ForecastPoint,ESRIDarkGrayReference,Domain,&obs=ttfffftt&countyNames=t" target="_blank" class="dropdown-item text-uppercase">IDSS Forecast Points</a>
+                            <a href="#" onclick="toggleSingleMeteogram('locationBrushyCreek')" class="dropdown-item text-uppercase">Meteogram</a>
+                            <a href="#" onclick="toggleShowOnLoad('brushyCreek')" class="dropdown-item text-uppercase"><i id="brushyCreekOff" class="fa-sharp fa-solid fa-toggle-off d-none"></i><i id="brushyCreekOn" class="fa-sharp fa-solid fa-toggle-on d-none"></i> Toggle On Load</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=AFD&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Area Forecast Discussion</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274" target="_blank" class="dropdown-item text-uppercase">Local Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274&unit=0&lg=english&FcstType=text&TextType=2" target="_blank" class="dropdown-item text-uppercase">Printable Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274&unit=0&lg=english&FcstType=text&TextType=1" target="_blank" class="dropdown-item text-uppercase">Text Forecast</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=PFM&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Point Forecasts</a>
+                            <a href="https://www.weather.gov/ewx/fire" target="_blank" class="dropdown-item text-uppercase">Local Fire Weather</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="collegeStationDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            COLLEGE STATION
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="collegeStationDropdownMenuLink">
+                            <a href="https://www.weather.gov/forecastpoints?lat=30.621&lon=-96.326&clat=30.621&clon=-96.326&zoom=9.5&basemap=esridarkgray&bbox=-19719439,1706090,-1372338,10673494&layers=Rivers,Day1ConvectiveOutlook,RangeRings,LocalStormReports,HazardsActive,Forecast,USStates,USCounties,ForecastPointPolygon,ForecastPoint,ESRIDarkGrayReference,Domain,&obs=ttfffftt&countyNames=t" target="_blank" class="dropdown-item text-uppercase">IDSS Forecast Points</a>
+                            <a href="#" onclick="toggleSingleMeteogram('locationCollegeStation')" class="dropdown-item text-uppercase">Meteogram</a>
+                            <a href="#" onclick="toggleShowOnLoad('collegeStation')" class="dropdown-item text-uppercase"><i id="collegeStationOff" class="fa-sharp fa-solid fa-toggle-off d-none"></i><i id="collegeStationOn" class="fa-sharp fa-solid fa-toggle-on d-none"></i> Toggle On Load</a>
+                            <a href="https://forecast.weather.gov/product.php?site=HGX&issuedby=HGX&product=AFD&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Area Forecast Discussion</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398" target="_blank" class="dropdown-item text-uppercase">Local Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398&unit=0&lg=english&FcstType=text&TextType=2" target="_blank" class="dropdown-item text-uppercase">Printable Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398&unit=0&lg=english&FcstType=text&TextType=1" target="_blank" class="dropdown-item text-uppercase">Text Forecast</a>
+                            <a href="https://forecast.weather.gov/product.php?site=HGX&issuedby=HGX&product=PFM&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Point Forecasts</a>
+                            <a href="https://www.weather.gov/hgx/fire" target="_blank" class="dropdown-item text-uppercase">Local Fire Weather</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sanAngeloDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SAN ANGELO
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="sanAngeloDropdownMenuLink">
+                            <a href="https://www.weather.gov/forecastpoints?lat=31.462&lon=-100.443&clat=31.462&clon=-100.443&zoom=9.5&basemap=esridarkgray&bbox=-19719439,1706090,-1372338,10673494&layers=Rivers,Day1ConvectiveOutlook,RangeRings,LocalStormReports,HazardsActive,Forecast,USStates,USCounties,ForecastPointPolygon,ForecastPoint,ESRIDarkGrayReference,Domain,&obs=ttfffftt&countyNames=t" target="_blank" class="dropdown-item text-uppercase">IDSS Forecast Points</a>
+                            <a href="#" onclick="toggleSingleMeteogram('locationSanAngelo')" class="dropdown-item text-uppercase">Meteogram</a>
+                            <a href="#" onclick="toggleShowOnLoad('sanAngelo')" class="dropdown-item text-uppercase"><i id="sanAngeloOff" class="fa-sharp fa-solid fa-toggle-off d-none"></i><i id="sanAngeloOn" class="fa-sharp fa-solid fa-toggle-on d-none"></i> Toggle On Load</a>
+                            <a href="https://forecast.weather.gov/product.php?site=SJT&issuedby=SJT&product=AFD&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Area Forecast Discussion</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703" target="_blank" class="dropdown-item text-uppercase">Local Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703&unit=0&lg=english&FcstType=text&TextType=2" target="_blank" class="dropdown-item text-uppercase">Printable Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703&unit=0&lg=english&FcstType=text&TextType=1" target="_blank" class="dropdown-item text-uppercase">Text Forecast</a>
+                            <a href="https://forecast.weather.gov/product.php?site=SJT&issuedby=SJT&product=PFM&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Point Forecasts</a>
+                            <a href="https://www.weather.gov/SJT/fire" target="_blank" class="dropdown-item text-uppercase">Local Fire Weather</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sanMarcosDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SAN MARCOS
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="sanMarcosDropdownMenuLink">
+                            <a href="https://www.weather.gov/forecastpoints?lat=29.934&lon=-98.068&clat=29.934&clon=-98.068&zoom=9.5&basemap=esridarkgray&bbox=-19719439,1706090,-1372338,10673494&layers=Rivers,Day1ConvectiveOutlook,RangeRings,LocalStormReports,HazardsActive,Forecast,USStates,USCounties,ForecastPointPolygon,ForecastPoint,ESRIDarkGrayReference,Domain,&obs=ttfffftt&countyNames=t" target="_blank" class="dropdown-item text-uppercase">IDSS Forecast Points</a>
+                            <a href="#" onclick="toggleSingleMeteogram('locationSanMarcos')" class="dropdown-item text-uppercase">Meteogram</a>
+                            <a href="#" onclick="toggleShowOnLoad('sanMarcos')" class="dropdown-item text-uppercase"><i id="sanMarcosOff" class="fa-sharp fa-solid fa-toggle-off d-none"></i><i id="sanMarcosOn" class="fa-sharp fa-solid fa-toggle-on d-none"></i> Toggle On Load</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=AFD&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Area Forecast Discussion</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677" target="_blank" class="dropdown-item text-uppercase">Local Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677&unit=0&lg=english&FcstType=text&TextType=2" target="_blank" class="dropdown-item text-uppercase">Printable Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677&unit=0&lg=english&FcstType=text&TextType=1" target="_blank" class="dropdown-item text-uppercase">Text Forecast</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=PFM&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Point Forecasts</a>
+                            <a href="https://www.weather.gov/ewx/fire" target="_blank" class="dropdown-item text-uppercase">Local Fire Weather</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="schertzDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SCHERTZ
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="schertzDropdownMenuLink">
+                            <a href="https://www.weather.gov/forecastpoints?lat=29.615&lon=-98.287&clat=29.614&clon=-98.283&zoom=9.5&basemap=esridarkgray&bbox=-19719439,1706090,-1372338,10673494&layers=Rivers,Day1ConvectiveOutlook,RangeRings,LocalStormReports,HazardsActive,Forecast,USStates,USCounties,ForecastPointPolygon,ForecastPoint,ESRIDarkGrayReference,Domain,&obs=ttfffftt&countyNames=t" target="_blank" class="dropdown-item text-uppercase">IDSS Forecast Points</a>
+                            <a href="#" onclick="toggleSingleMeteogram('locationSchertz')" class="dropdown-item text-uppercase">Meteogram</a>
+                            <a href="#" onclick="toggleShowOnLoad('schertz')" class="dropdown-item text-uppercase"><i id="schertzOff" class="fa-sharp fa-solid fa-toggle-off d-none"></i><i id="schertzOn" class="fa-sharp fa-solid fa-toggle-on d-none"></i> Toggle On Load</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=AFD&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Area Forecast Discussion</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874" target="_blank" class="dropdown-item text-uppercase">Local Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874&unit=0&lg=english&FcstType=text&TextType=2" target="_blank" class="dropdown-item text-uppercase">Printable Forecast</a>
+                            <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874&unit=0&lg=english&FcstType=text&TextType=1" target="_blank" class="dropdown-item text-uppercase">Text Forecast</a>
+                            <a href="https://forecast.weather.gov/product.php?site=EWX&issuedby=EWX&product=PFM&format=CI&version=1&glossary=1" target="_blank" class="dropdown-item text-uppercase">Point Forecasts</a>
+                            <a href="https://www.weather.gov/ewx/fire" target="_blank" class="dropdown-item text-uppercase">Local Fire Weather</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div id="locationSanMarcos" class="card mt-2 shadow d-none meteograms">
+            <div class="card-header bg-secondary text-white">
+                SAN MARCOS
+                <button type="button" class="close" onclick="toggleSingleMeteogram('locationSanMarcos')">
+                    &times;
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">0-48 HOURS (SAN MARCOS)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.9340&lon=-98.0677&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=0&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">48-96 HOURS (SAN MARCOS)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.9340&lon=-98.0677&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=48&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.9340&lon=-98.0677&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">96-144 HOURS (SAN MARCOS)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.9340&lon=-98.0677&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=96&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="locationBrushyCreek" class="card mt-2 shadow d-none meteograms">
+            <div class="card-header bg-secondary text-white">
+                BRUSHY CREEK
+                <button type="button" class="close" onclick="toggleSingleMeteogram('locationBrushyCreek')">
+                    &times;
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">0-48 HOURS (BRUSHY CREEK)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.5094&lon=-97.7274&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=0&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">48-96 HOURS (BRUSHY CREEK)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.5094&lon=-97.7274&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=48&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.5094&lon=-97.7274&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">96-144 HOURS (BRUSHY CREEK)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.5094&lon=-97.7274&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=96&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="locationSanAngelo" class="card mt-2 shadow d-none meteograms">
+            <div class="card-header bg-secondary text-white">
+                SAN ANGELO
+                <button type="button" class="close" onclick="toggleSingleMeteogram('locationSanAngelo')">
+                    &times;
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">0-48 HOURS (SAN ANGELO)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=31.2578&lon=-100.4703&wfo=SJT&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=0&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">48-96 HOURS (SAN ANGELO)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=31.2578&lon=-100.4703&wfo=SJT&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=48&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=31.2578&lon=-100.4703&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">96-144 HOURS (SAN ANGELO)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=31.2578&lon=-100.4703&wfo=SJT&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=96&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="locationSchertz" class="card mt-2 shadow d-none meteograms">
+            <div class="card-header bg-secondary text-white">
+                SCHERTZ
+                <button type="button" class="close" onclick="toggleSingleMeteogram('locationSchertz')">
+                    &times;
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            0-48 HOURS (SCHERTZ)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.6151&lon=-98.2874&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=0&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            48-96 HOURS (SCHERTZ)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.6151&lon=-98.2874&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=48&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=29.6151&lon=-98.2874&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            96-144 HOURS (SCHERTZ)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=29.6151&lon=-98.2874&wfo=EWX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=96&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="locationCollegeStation" class="card mt-2 shadow d-none meteograms">
+            <div class="card-header bg-secondary text-white">
+                COLLEGE STATION
+                <button type="button" class="close" onclick="toggleSingleMeteogram('locationCollegeStation')">
+                    &times;
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            0-48 HOURS (COLLEGE STATION)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.6102&lon=-96.3398&wfo=HGX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=0&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            48-96 HOURS (COLLEGE STATION)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.6102&lon=-96.3398&wfo=HGX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=48&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://forecast.weather.gov/MapClick.php?lat=30.6102&lon=-96.3398&unit=0&lg=english&FcstType=graphical" target="_blank" class="d-block badge badge-warning border border-dark shadow mb-2 text-uppercase">
+                            96-144 HOURS (COLLEGE STATION)
+                        </a>
+                        <img src="https://forecast.weather.gov/meteograms/Plotter.php?lat=30.6102&lon=-96.3398&wfo=HGX&zcode=TXZ173&gset=18&gdiff=3&unit=0&tinfo=CY6&ahour=96&pcmd=111111111111101110001110100000000000000000000000000000000000&lg=en&indu=1!1!1!&dd=&bw=&hrspan=48&pqpfhr=6&psnwhr=6" class="img-fluid rounded border border-secondary shadow">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="forecast" class="card mt-2 shadow">
+            <div class="card-header bg-primary text-white">
+                NATIONAL FORECAST
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <a href="https://www.weather.gov/forecastmaps" target="_blank">
+                            <img src="https://www.wpc.ncep.noaa.gov//noaa/noaa.gif" class="img-fluid rounded border border-secondary shadow">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="satellite" class="card mt-2 shadow">
+            <div class="card-header bg-success text-white">
+                SATELLITE
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/Sandwich/625x375.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/conus.php?sat=G16" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CONUS - SANDWICH RGB (VIS + BAND 13)
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/625x375.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/conus.php?sat=G16" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CONUS - GEOCOLOR
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/GLM/CONUS/EXTENT3/625x375.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/conus.php?sat=G16" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CONUS - LIGHTNING
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/13/625x375.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/conus.php?sat=G16" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CONUS - BAND 13
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/Dust/625x375.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/conus.php?sat=G16" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CONUS - DUST COMPOSITE
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/taw/Sandwich/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=taw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - SANDWICH RGB (VIS + BAND 13)
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/taw/GEOCOLOR/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=taw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - GEOCOLOR
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/taw/EXTENT3/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=taw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - LIGHTNING
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/taw/13/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=taw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - BAND 13
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/taw/Dust/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=taw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - DUST COMPOSITE
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/gm/Sandwich/500x500.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=gm" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            GULF OF MEXICO - SANDWICH RGB (VIS + BAND 13)
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/gm/GEOCOLOR/500x500.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=gm" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            GULF OF MEXICO - GEOCOLOR
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/GLM/SECTOR/gm/EXTENT3/500x500.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=gm" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            GULF OF MEXICO - LIGHTNING
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/gm/13/500x500.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=gm" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            GULF OF MEXICO - BAND 13
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/gm/Dust/500x500.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G16&sector=gm" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            GULF OF MEXICO - DUST COMPOSITE
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tpw/Sandwich/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=tpw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - SANDWICH RGB (VIS + BAND 13)
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tpw/GEOCOLOR/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=tpw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - GEOCOLOR
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES18/GLM/SECTOR/tpw/EXTENT3/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=tpw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - LIGHTNING
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tpw/13/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=tpw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - BAND 13
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/tpw/Dust/900x540.jpg" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G18&sector=tpw" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - DUST COMPOSITE
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="http://www.atmo.arizona.edu/gifs/WV500MB.GIF" class="img-fluid rounded border border-secondary shadow">
+                        <a href="http://www.atmo.arizona.edu/products/wximagery/500mbwv.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            500 MB WATER VAPOR
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="severe" class="card mt-2 shadow">
+            <div class="card-header bg-danger text-white">
+                SEVERE
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <img src="https://forecast.weather.gov/wwamap/png/US.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.weather.gov/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            WATCHES, WARNINGS, ADVISORIES
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/watch/validww.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/watch/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            Current Convective Watches
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/md/validmd.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/md/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            Current Mesoscale Discussions
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/outlook/day1otlk.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/outlook/day1otlk.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 1 - CATEGORICAL OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/outlook/day2otlk.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/outlook/day2otlk.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 2 - CATEGORICAL OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/outlook/day3otlk.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/outlook/day3otlk.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 3 - CATEGORICAL OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/exper/day4-8/day48prob.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/exper/day4-8/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 4-8 - CATEGORICAL OUTLOOK
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="fire" class="card mt-2 shadow">
+            <div class="card-header bg-warning text-white">
+                FIRE
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/fire_wx/day1otlk_fire.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/fire_wx/fwdy1.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 1 - FIRE WEATHER OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/fire_wx/day2otlk_fire.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/fire_wx/fwdy2.html" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 2 - FIRE WEATHER OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.spc.noaa.gov/products/exper/fire_wx/imgs/day38otlk_fire.gif" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.spc.noaa.gov/products/exper/fire_wx/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            DAY 3-8 - FIRE WEATHER OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://tfsfrp.tamu.edu/wildfires/DecBan.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://texasforestservice.tamu.edu/TexasBurnBans/" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            OUTDOOR BURN BANS
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="tropical" class="card mt-2 shadow">
+            <div class="card-header bg-info text-white">
+                TROPICAL
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush align-items-center">
+                    <li class="list-group-item">
+                        <img src="https://www.nhc.noaa.gov/xgtwo/two_atl_7d0.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            ATLANTIC - 7 DAY OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.nhc.noaa.gov/xgtwo/two_pac_7d0.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.nhc.noaa.gov/gtwo.php?basin=epac&fdays=7" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            PACIFIC - 7 DAY OUTLOOK
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <img src="https://www.nhc.noaa.gov/xgtwo/two_cpac_7d0.png" class="img-fluid rounded border border-secondary shadow">
+                        <a href="https://www.nhc.noaa.gov/gtwo.php?basin=cpac&fdays=7" target="_blank" class="d-block badge badge-warning border border-dark shadow mt-2 text-uppercase">
+                            CENTRAL PACIFIC - 7 DAY OUTLOOK
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        function toggleSingleMeteogram(id) {
+            var x = $("#" + id);
+            if (!x.hasClass("d-block")) {
+                x.addClass("d-block");
+            } else {
+                x.removeClass("d-block");
+            }
+        }
+        function toggleAllMeteograms() {
+            var x = $(".meteograms");
+            x.each(function () {
+                if (!$(this).hasClass("d-block")) {
+                    $(this).addClass("d-block");
+                } else {
+                    $(this).removeClass("d-block");
+                }
+            });
+        }
+        function toggleShowOnLoad(city) {
+            var localStorageItem = localStorage.getItem(city);
+            var isCityTrue = localStorageItem === "true";
+            localStorage.setItem(city, isCityTrue ? "false" : "true");
+            $("#" + city + "On").toggleClass("d-none", isCityTrue);
+            $("#" + city + "Off").toggleClass("d-none", !isCityTrue);
+        }
+        $(document).ready(function () {
+            var cities = ["sanMarcos", "brushyCreek", "sanAngelo", "schertz", "collegeStation"];
+            cities.forEach(function (city) {
+                var localStorageItem = localStorage.getItem(city);
+                var isCityTrue = localStorageItem === "true";
+                if (isCityTrue) {
+                    $("#location" + city.charAt(0).toUpperCase() + city.slice(1)).addClass("d-block");
+                    $("#" + city + "On").toggleClass("d-none", !isCityTrue);
+                } else {
+                    $("#" + city + "Off").toggleClass("d-none", isCityTrue);
+                    localStorage.setItem(city, "false");
+                }
+            });
+        });
+
+
+        // Get all anchor tags and sort them alphabetically
+        const anchors = Array.from(document.querySelectorAll('.dropdown-item'));
+
+        // Populate the list with the anchor tags
+        const list = document.getElementById('searchResults');
+        list.style.maxHeight = '500px'; // Set the maximum height
+        list.style.overflowY = 'auto'; // Enable vertical scrolling
+        anchors.forEach(anchor => {
+            const parentMenu = anchor.closest('.dropdown-menu');
+            const parentMenuTitle = parentMenu.previousElementSibling.textContent;
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item');
+            listItem.innerHTML = `<a class="list-group-item list-group-item-action" href="${anchor.href}" target="${anchor.target}">${parentMenuTitle} - ${anchor.textContent}</a>`;
+            list.appendChild(listItem);
+        });
+
+
+        // Filter the list based on the search box input
+        document.getElementById('searchBox').addEventListener('input', event => {
+            const searchTerm = event.target.value.toLowerCase();
+            Array.from(list.children).forEach(listItem => {
+                const linkText = listItem.textContent.toLowerCase();
+                listItem.style.display = linkText.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        function handleModalKeydown(event) {
+            if (event.key === 's') {
+                event.preventDefault();
+                $('.modal').modal('show');
+                $('#searchBox').focus().val('');
+                Array.from(list.children).forEach(listItem => listItem.style.display = '');
+            }
+        }
+
+        $('.modal').on('shown.bs.modal', function () {
+            $('#searchBox').focus();
+            document.removeEventListener('keydown', handleModalKeydown);
+        });
+
+        $('.modal').on('hidden.bs.modal', function () {
+            document.addEventListener('keydown', handleModalKeydown);
+        });
+
+        document.addEventListener('keydown', handleModalKeydown);
+
+
+
+        // Navigate the list with the arrow keys and follow the link when Enter is pressed
+        document.addEventListener('keydown', event => {
+            if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
+                event.preventDefault();
+                const items = Array.from(list.children).filter(item => item.style.display !== 'none');
+                const activeItem = items.find(item => item.classList.contains('active'));
+                let index = items.indexOf(activeItem);
+                if (event.key === 'ArrowUp') index = Math.max(0, index - 1);
+                if (event.key === 'ArrowDown') index = Math.min(items.length - 1, index + 1);
+                if (event.key === 'Enter' && activeItem) window.open(activeItem.querySelector('a').href, activeItem.querySelector('a').target);
+                if (activeItem) activeItem.classList.remove('active');
+                items[index].classList.add('active');
+                items[index].scrollIntoView({ block: 'nearest' });
+            }
+        });
+        
+        
+    </script>
+</body>
+</html>

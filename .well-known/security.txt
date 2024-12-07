@@ -1,0 +1,6 @@
+# security.txt for chrismartintx.com
+
+Contact: mailto:security@chrismartintx.com
+Encryption: https://chrismartintx.com/pgp-key.txt
+Preferred-Languages: en
+Expires: 2025-03-31T23:59:59Z
